@@ -1,35 +1,53 @@
-import sys
-from fastapi import FastAPI
-from db import init_db, add_persoana, delete_persoana, get_persoane
+from flask import Flask, request, jsonify
+import sqlite3
 
-app = FastAPI()
-init_db()
+app = Flask(__name__)
 
-@app.post("/add")
-def add(nume: str, prenume: str):
-    add_persoana(nume, prenume)
-    return {"status": "added"}
+def get_connection():
+    return sqlite3.connect("people.db")
 
-@app.delete("/delete")
-def delete(nume: str, prenume: str):
-    delete_persoana(nume, prenume)
-    return {"status": "deleted"}
+def init_db():
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY, nume TEXT, prenume TEXT)''')
+    conn.commit()
+    conn.close()
 
-@app.get("/get")
+@app.route('/add', methods=['POST'])
+def add():
+    nume = request.args.get('nume')
+    prenume = request.args.get('prenume')
+    if not nume or not prenume:
+        return jsonify({"status": "error", "message": "nume si prenume sunt necesare"}), 400
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute("INSERT INTO people (nume, prenume) VALUES (?, ?)", (nume, prenume))
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "added"})
+
+@app.route('/delete', methods=['POST'])
+def delete():
+    nume = request.args.get('nume')
+    prenume = request.args.get('prenume')
+    if not nume or not prenume:
+        return jsonify({"status": "error", "message": "nume si prenume sunt necesare"}), 400
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute("DELETE FROM people WHERE nume=? AND prenume=?", (nume, prenume))
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "deleted"})
+
+@app.route('/get', methods=['GET'])
 def get():
-    return {"persoane": get_persoane()}
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute("SELECT nume, prenume FROM people")
+    results = c.fetchall()
+    conn.close()
+    return jsonify({"people": results})
 
-# CLI usage
-if __name__ == "__main__":
+if __name__ == '__main__':
     init_db()
-    args = sys.argv[1:]
-    if len(args) == 3 and args[2].upper() == "ADD":
-        add_persoana(args[0], args[1])
-        print("Adaugat!")
-    elif len(args) == 3 and args[2].upper() == "DELETE":
-        delete_persoana(args[0], args[1])
-        print("Sters!")
-    elif len(args) == 1 and args[0].upper() == "GET":
-        print(get_persoane())
-    else:
-        print("Argumente invalide.")
+    app.run(host='0.0.0.0', port=8000)
