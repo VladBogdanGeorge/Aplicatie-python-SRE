@@ -45,7 +45,11 @@ jobs:
           DB_PORT: 5432
         ports:
           - 8000:8000
-        # FARA healthcheck la app pentru debug
+        options: >-
+          --health-cmd="curl --fail http://localhost:8000/users || exit 1"
+          --health-interval=20s
+          --health-timeout=10s
+          --health-retries=10
 
     steps:
       - name: Așteaptă ca serviciile să fie gata
