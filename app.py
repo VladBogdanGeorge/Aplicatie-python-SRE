@@ -1,53 +1,32 @@
-from flask import Flask, request, jsonify
-import sqlite3
+from flask import Flask, jsonify
+import psycopg2
+import os
 
 app = Flask(__name__)
 
-def get_connection():
-    return sqlite3.connect("people.db")
+DB_NAME = os.environ.get('POSTGRES_DB', 'bogdandb')
+DB_USER = os.environ.get('POSTGRES_USER', 'bogdan')
+DB_HOST = os.environ.get('POSTGRES_HOST', 'postgres')
+DB_PASS = os.environ.get('POSTGRES_PASSWORD', 'bogdanpass')
 
-def init_db():
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS people (id INTEGER PRIMARY KEY, nume TEXT, prenume TEXT)''')
-    conn.commit()
-    conn.close()
+def get_db_connection():
+    conn = psycopg2.connect(
+        host=DB_HOST,
+        database=DB_NAME,
+        user=DB_USER,
+        password=DB_PASS
+    )
+    return conn
 
-@app.route('/add', methods=['POST'])
-def add():
-    nume = request.args.get('nume')
-    prenume = request.args.get('prenume')
-    if not nume or not prenume:
-        return jsonify({"status": "error", "message": "nume si prenume sunt necesare"}), 400
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute("INSERT INTO people (nume, prenume) VALUES (?, ?)", (nume, prenume))
-    conn.commit()
+@app.route('/get')
+def get_data():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT version();')
+    version = cur.fetchone()
+    cur.close()
     conn.close()
-    return jsonify({"status": "added"})
-
-@app.route('/delete', methods=['POST'])
-def delete():
-    nume = request.args.get('nume')
-    prenume = request.args.get('prenume')
-    if not nume or not prenume:
-        return jsonify({"status": "error", "message": "nume si prenume sunt necesare"}), 400
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute("DELETE FROM people WHERE nume=? AND prenume=?", (nume, prenume))
-    conn.commit()
-    conn.close()
-    return jsonify({"status": "deleted"})
-
-@app.route('/get', methods=['GET'])
-def get():
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute("SELECT nume, prenume FROM people")
-    results = c.fetchall()
-    conn.close()
-    return jsonify({"people": results})
+    return jsonify({'postgres_version': version[0]})
 
 if __name__ == '__main__':
-    init_db()
     app.run(host='0.0.0.0', port=8000)
