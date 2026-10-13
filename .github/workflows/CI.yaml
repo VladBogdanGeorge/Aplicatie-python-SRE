@@ -36,7 +36,7 @@ jobs:
           --health-retries=5
 
       app:
-        image: zxlm4628/tema-interviu:1.0.6
+        image: zxlm4628/tema-interviu:1.0.7
         env:
           DB_NAME: bogdandb
           DB_USER: bogdan
