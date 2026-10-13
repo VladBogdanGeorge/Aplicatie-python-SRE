@@ -2,6 +2,7 @@ import sys
 import psycopg2
 import os
 from flask import Flask, request, jsonify
+import time
 
 DB_NAME = os.environ.get('DB_NAME', 'bogdan')
 DB_USER = os.environ.get('DB_USER', 'bogdan')
@@ -9,9 +10,17 @@ DB_HOST = os.environ.get('DB_HOST', 'postgres')
 DB_PASS = os.environ.get('DB_PASSWORD', 'bogdanpass')
 
 def get_db_connection():
-    return psycopg2.connect(
-        host=DB_HOST, database=DB_NAME, user=DB_USER, password=DB_PASS
-    )
+    retries = 10
+    while retries > 0:
+        try:
+            conn = psycopg2.connect(host=DB_HOST, database=DB_NAME, user=DB_USER, password=DB_PASS)
+            return conn
+        except psycopg2.OperationalError:
+            print("Postgres nu e gata, mai încerc în 2 secunde...")
+            time.sleep(2)
+            retries -= 1
+    raise Exception("Nu m-am putut conecta la Postgres după mai multe încercări!")
+
 
 def create_table_if_not_exists():
     conn = get_db_connection()
