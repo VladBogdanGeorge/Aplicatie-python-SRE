@@ -1,0 +1,48 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1436.vfa_244484591f">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2205.vc9522a_9d5711"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2205.vc9522a_9d5711">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3908.vd6b_b_5a_a_54010">
+    <script>pipeline {
+    agent any
+
+    stages {
+        stage(&apos;Checkout&apos;) {
+            steps {
+                script {
+                    // Print working directory
+                    sh &apos;echo &quot;Current directory: $(pwd)&quot;&apos;
+                }
+
+                // Clonning the GitHub repo
+                git url: &apos;https://github.com/VladBogdanGeorge/Aplicatie-python-SRE.git&apos;, branch: &apos;main&apos;
+            }
+        }
+
+        stage(&apos;Build and Deploy&apos;) {
+            steps {
+                script {
+                    // Terminate any active containers then build and redeploy new ones with the latest version from GitHub
+                    sh &apos;docker-compose down&apos;
+                    sh &apos;docker-compose up -d --build&apos;
+                }
+            }
+        }
+    }
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
