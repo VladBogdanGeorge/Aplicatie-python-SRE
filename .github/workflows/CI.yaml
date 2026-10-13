@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: Așteaptă ca serviciile să fie gata
-        run: sleep 20
+        run: sleep 5
         
       - name: Execută operația pe API
         run: |
