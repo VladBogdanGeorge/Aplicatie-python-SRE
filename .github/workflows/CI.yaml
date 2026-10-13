@@ -41,7 +41,7 @@ jobs:
           DB_NAME: bogdan
           DB_USER: bogdan
           DB_PASSWORD: bogdanpass
-          DB_HOST: postgres
+          DB_HOST: db
         ports:
           - 8000:8000
         options: >-
