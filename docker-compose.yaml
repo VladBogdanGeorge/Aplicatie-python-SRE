@@ -14,7 +14,7 @@ services:
       - postgres_data:/var/lib/postgresql
 
   app:
-    image: zxlm4626/tema-interviu:1.0.2
+    image: zxlm4628/tema-interviu:1.0.6
     container_name: python_app_container
     environment:
       - DB_NAME=bogdandb
@@ -24,8 +24,8 @@ services:
       - DB_PORT=5432
     depends_on:
       - postgres
+    ports:
+      - "8000:8000"
 
 volumes:
   postgres_data: # By default, the volume is located at /var/lib/docker/volumes
-
-  
