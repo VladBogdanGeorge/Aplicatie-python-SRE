@@ -1,15 +1,12 @@
-version: '3'
+FROM jenkins/jenkins:latest
 
-services:
-  jenkins:
-    #image: jenkins/jenkins:latest
-    build: .
-    container_name: jenkins
-    ports:
-      - "8080:8080"
-    volumes:
-      - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
+USER root
 
-volumes:
-  jenkins_home: # By default, the volume is located at /var/lib/docker/volumes
+# Install Docker
+RUN apt-get update && apt-get install -y docker.io
+
+# Install Docker Compose
+RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose
+
+USER jenkins
