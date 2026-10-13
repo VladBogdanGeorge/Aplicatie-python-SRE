@@ -34,7 +34,6 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
-
       app:
         image: zxlm4628/tema-interviu:1.0.7
         env:
@@ -45,21 +44,11 @@ jobs:
           DB_PORT: 5432
         ports:
           - 8000:8000
-        options: >-
-          --health-cmd="curl --fail http://localhost:8000/users || exit 1"
-          --health-interval=20s
-          --health-timeout=10s
-          --health-retries=10
 
     steps:
       - name: Așteaptă ca serviciile să fie gata
         run: sleep 20
-
-      - name: Debug curl /users și /
-        run: |
-          curl -v http://localhost:8000/users || true
-          curl -v http://localhost:8000/ || true
-
+        
       - name: Execută operația pe API
         run: |
           if [ "${{ github.event.inputs.OPERATIE }}" = "ADD" ]; then
