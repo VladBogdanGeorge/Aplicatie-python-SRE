@@ -1,3 +1,5 @@
+Deploy app first :)
+
 http://localhost:8000/ -- api for checking the Postgres contents
 
 ## Examples of adding/deleting users
