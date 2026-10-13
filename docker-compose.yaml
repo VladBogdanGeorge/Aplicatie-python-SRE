@@ -5,7 +5,7 @@ services:
     image: postgres:latest
     container_name: postgres_container
     environment:
-      POSTGRES_DB: bogdandb
+      POSTGRES_DB: bogdan
       POSTGRES_USER: bogdan
       POSTGRES_PASSWORD: bogdanpass
     ports:
@@ -17,7 +17,7 @@ services:
     image: zxlm4628/tema-interviu:1.0.7
     container_name: python_app_container
     environment:
-      - DB_NAME=bogdandb
+      - DB_NAME=bogdan
       - DB_USER=bogdan
       - DB_PASSWORD=bogdanpass
       - DB_HOST=postgres
