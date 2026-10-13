@@ -1,0 +1,65 @@
+name: Test API
+
+on:
+  workflow_dispatch:
+    inputs:
+      NUME:
+        description: 'Nume'
+        required: true
+        default: 'Popescu'
+      PRENUME:
+        description: 'Prenume'
+        required: true
+        default: 'Ion'
+      OPERATIE:
+        description: 'Operatie (ADD/DELETE/GET)'
+        required: true
+        default: 'ADD'
+
+jobs:
+  test_api:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:15
+        env:
+          POSTGRES_DB: bogdandb
+          POSTGRES_USER: bogdan
+          POSTGRES_PASSWORD: bogdanpass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U bogdan" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=5
+
+      app:
+        image: zxlm4628/tema-interviu:1.0.6
+        env:
+          DB_NAME: bogdandb
+          DB_USER: bogdan
+          DB_PASSWORD: bogdanpass
+          DB_HOST: db
+        ports:
+          - 8000:8000
+        options: >-
+          --health-cmd="curl --fail http://localhost:8000/users || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Așteaptă ca serviciile să fie gata
+        run: sleep 10
+
+      - name: Execută operația pe API
+        run: |
+          if [ "${{ github.event.inputs.OPERATIE }}" = "ADD" ]; then
+            curl -X POST -H "Content-Type: application/json" -d "{\"nume\":\"${{ github.event.inputs.NUME }}\",\"prenume\":\"${{ github.event.inputs.PRENUME }}\"}" http://localhost:8000/users
+          elif [ "${{ github.event.inputs.OPERATIE }}" = "DELETE" ]; then
+            curl -X DELETE -H "Content-Type: application/json" -d "{\"nume\":\"${{ github.event.inputs.NUME }}\",\"prenume\":\"${{ github.event.inputs.PRENUME }}\"}" http://localhost:8000/users
+          elif [ "${{ github.event.inputs.OPERATIE }}" = "GET" ]; then
+            curl http://localhost:8000/users
+          fi
