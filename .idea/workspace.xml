@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bf88dbd3-2bfa-4913-b9f1-f24685052782" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Jenkins/config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jenkins/docker-compose.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Jenkins/docker-compose.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +62,8 @@
       <recent name="C:\Users\george.vlad\PycharmProjects\TemaInterviu" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\george.vlad\PycharmProjects\TemaInterviu\Jenkins\Jobs\Deploy_Application" />
+      <recent name="C:\Users\george.vlad\PycharmProjects\TemaInterviu\Jenkins\Jobs" />
       <recent name="C:\Users\george.vlad\PycharmProjects\TemaInterviu\APP" />
     </key>
   </component>
