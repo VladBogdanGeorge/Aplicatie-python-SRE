@@ -24,7 +24,7 @@ jobs:
       db:
         image: postgres:15
         env:
-          POSTGRES_DB: bogdandb
+          POSTGRES_DB: bogdan
           POSTGRES_USER: bogdan
           POSTGRES_PASSWORD: bogdanpass
         ports:
@@ -38,7 +38,7 @@ jobs:
       app:
         image: zxlm4628/tema-interviu:1.0.7
         env:
-          DB_NAME: bogdandb
+          DB_NAME: bogdan
           DB_USER: bogdan
           DB_PASSWORD: bogdanpass
           DB_HOST: postgres
