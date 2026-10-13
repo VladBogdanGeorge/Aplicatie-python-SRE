@@ -3,7 +3,7 @@ import psycopg2
 import os
 from flask import Flask, request, jsonify
 
-DB_NAME = os.environ.get('DB_NAME', 'bogdandb')
+DB_NAME = os.environ.get('DB_NAME', 'bogdan')
 DB_USER = os.environ.get('DB_USER', 'bogdan')
 DB_HOST = os.environ.get('DB_HOST', 'postgres')
 DB_PASS = os.environ.get('DB_PASSWORD', 'bogdanpass')
