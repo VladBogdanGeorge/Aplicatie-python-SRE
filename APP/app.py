@@ -15,7 +15,7 @@ def get_db_connection():
         try:
             conn = psycopg2.connect(host=DB_HOST, database=DB_NAME, user=DB_USER, password=DB_PASS)
             return conn
-        except psycopg2.OperationalError:
+        except:
             print("Postgres nu e gata, mai încerc în 2 secunde...")
             time.sleep(2)
             retries -= 1
