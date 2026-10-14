@@ -4,10 +4,10 @@ import os
 from flask import Flask, request, jsonify
 import time
 
-DB_NAME = os.environ.get('DB_NAME', 'bogdan')
-DB_USER = os.environ.get('DB_USER', 'bogdan')
-DB_HOST = os.environ.get('DB_HOST', 'postgres')
-DB_PASS = os.environ.get('DB_PASSWORD', 'bogdanpass')
+DB_NAME = os.environ.get('DB_NAME')
+DB_USER = os.environ.get('DB_USER')
+DB_HOST = os.environ.get('DB_HOST')
+DB_PASS = os.environ.get('DB_PASSWORD')
 
 def get_db_connection():
     retries = 10
