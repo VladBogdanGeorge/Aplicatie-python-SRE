@@ -66,7 +66,7 @@ def get_users():
 # Flask API
 app_flask = Flask(__name__)
 
-@app_flask.route('/users', methods=['GET'])
+@app_flask.route('/get', methods=['GET'])
 def api_get_users():
     conn = get_db_connection()
     cur = conn.cursor()
