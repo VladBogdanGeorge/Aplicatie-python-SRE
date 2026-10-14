@@ -16,10 +16,10 @@ def get_db_connection():
             conn = psycopg2.connect(host=DB_HOST, database=DB_NAME, user=DB_USER, password=DB_PASS)
             return conn
         except:
-            print("Postgres nu e gata, mai încerc în 2 secunde...")
+            print("Postgress not ready, waiting 2 more seconds")
             time.sleep(2)
             retries -= 1
-    raise Exception("Nu m-am putut conecta la Postgres după mai multe încercări!")
+    raise Exception("Couldn't connect to Postgress")
 
 
 def create_table_if_not_exists():
@@ -84,7 +84,7 @@ def api_add_user():
     if not nume or not prenume:
         return jsonify({'error': 'Missing nume or prenume'}), 400
     add_user(nume, prenume)
-    return jsonify({'message': 'User adaugat'}), 201
+    return jsonify({'message': 'User added'}), 201
 
 @app_flask.route('/delete', methods=['DELETE'])
 def api_delete_user():
@@ -94,7 +94,7 @@ def api_delete_user():
     if not nume or not prenume:
         return jsonify({'error': 'Missing nume or prenume'}), 400
     delete_user(nume, prenume)
-    return jsonify({'message': 'User sters'}), 200
+    return jsonify({'message': 'User deleted'}), 200
 
 @app_flask.route('/')
 def home():
@@ -104,7 +104,7 @@ def home():
     users = curs.fetchall()
     curs.close()
     conn.close()
-    html = "<h1>Lista useri</h1><ul>"
+    html = "<h1>Users list</h1><ul>"
     for user in users:
         html += f"<li>{user[1]} {user[2]}</li>"
     html += "</ul>"
