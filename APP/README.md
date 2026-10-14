@@ -8,4 +8,4 @@ curl -X POST -H "Content-Type: application/json" -d '{"nume":"Popescu","prenume"
 
 curl -X DELETE -H "Content-Type: application/json" -d '{"nume":"Popescu","prenume":"Ion"}' http://localhost:8000/users
 
-curl http://localhost:8000/users  -- get users
+curl http://localhost:8000/get  -- get users
