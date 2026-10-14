@@ -24,8 +24,8 @@ def get_db_connection():
 
 def create_table_if_not_exists():
     conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('''
+    curs = conn.cursor()
+    curs.execute('''
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             nume VARCHAR(100),
@@ -33,34 +33,34 @@ def create_table_if_not_exists():
         );
     ''')
     conn.commit()
-    cur.close()
+    curs.close()
     conn.close()
 
 def add_user(nume, prenume):
     conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('INSERT INTO users (nume, prenume) VALUES (%s, %s);', (nume, prenume))
+    curs = conn.cursor()
+    curs.execute('INSERT INTO users (nume, prenume) VALUES (%s, %s);', (nume, prenume))
     conn.commit()
-    cur.close()
+    curs.close()
     conn.close()
     print("User adaugat.")
 
 def delete_user(nume, prenume):
     conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('DELETE FROM users WHERE nume=%s AND prenume=%s;', (nume, prenume))
+    curs = conn.cursor()
+    curs.execute('DELETE FROM users WHERE nume=%s AND prenume=%s;', (nume, prenume))
     conn.commit()
-    cur.close()
+    curs.close()
     conn.close()
     print("User sters.")
 
 def get_users():
     conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT id, nume, prenume FROM users;')
-    for row in cur.fetchall():
+    curs = conn.cursor()
+    curs.execute('SELECT id, nume, prenume FROM users;')
+    for row in curs.fetchall():
         print(row)
-    cur.close()
+    curs.close()
     conn.close()
 
 # Flask API
@@ -69,10 +69,10 @@ app_flask = Flask(__name__)
 @app_flask.route('/get', methods=['GET'])
 def api_get_users():
     conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT id, nume, prenume FROM users;')
-    users = [{'id': row[0], 'nume': row[1], 'prenume': row[2]} for row in cur.fetchall()]
-    cur.close()
+    curs = conn.cursor()
+    curs.execute('SELECT id, nume, prenume FROM users;')
+    users = [{'id': row[0], 'nume': row[1], 'prenume': row[2]} for row in curs.fetchall()]
+    curs.close()
     conn.close()
     return jsonify(users)
 
@@ -99,10 +99,10 @@ def api_delete_user():
 @app_flask.route('/')
 def home():
     conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT id, nume, prenume FROM users;')
-    users = cur.fetchall()
-    cur.close()
+    curs = conn.cursor()
+    curs.execute('SELECT id, nume, prenume FROM users;')
+    users = curs.fetchall()
+    curs.close()
     conn.close()
     html = "<h1>Lista useri</h1><ul>"
     for user in users:
