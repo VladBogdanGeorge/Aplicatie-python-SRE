@@ -76,7 +76,7 @@ def api_get_users():
     conn.close()
     return jsonify(users)
 
-@app_flask.route('/users', methods=['POST'])
+@app_flask.route('/add', methods=['POST'])
 def api_add_user():
     data = request.get_json()
     nume = data.get('nume')
@@ -86,7 +86,7 @@ def api_add_user():
     add_user(nume, prenume)
     return jsonify({'message': 'User adaugat'}), 201
 
-@app_flask.route('/users', methods=['DELETE'])
+@app_flask.route('/delete', methods=['DELETE'])
 def api_delete_user():
     data = request.get_json()
     nume = data.get('nume')
