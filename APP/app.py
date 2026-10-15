@@ -43,7 +43,7 @@ def add_user(nume, prenume):
     conn.commit()
     curs.close()
     conn.close()
-    print("User adaugat.")
+    print("User added.")
 
 def delete_user(nume, prenume):
     conn = get_db_connection()
@@ -52,7 +52,7 @@ def delete_user(nume, prenume):
     conn.commit()
     curs.close()
     conn.close()
-    print("User sters.")
+    print("User deleted.")
 
 def get_users():
     conn = get_db_connection()
